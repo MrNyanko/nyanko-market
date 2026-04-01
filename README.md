@@ -22,10 +22,10 @@ This plugin fuses rigorous TTY tracking with macOS native notification fallbacks
 1. **Add the marketplace** to Claude Code:
    ```bash
    # HTTPS
-   claude plugin marketplace add https://github.com/Chaoschan/nyanko-market
+   claude plugin marketplace add https://github.com/MrNyanko/nyanko-market
    
    # SSH (if you have GitHub SSH keys configured)
-   claude plugin marketplace add git@github.com:Chaoschan/nyanko-market.git
+   claude plugin marketplace add git@github.com:MrNyanko/nyanko-market.git
    ```
 
 2. **Install the plugin**:
