@@ -1,0 +1,17 @@
+{
+  "name": "nyanko-market",
+  "owner": {
+    "name": "Chaoschan"
+  },
+  "metadata": {
+    "description": "Nyanko plugins"
+  },
+  "plugins": [
+    {
+      "name": "nyanko-ghostty-notify",
+      "source": "./nyanko-ghostty-notify",
+      "description": "Ghostty terminal notifications",
+      "keywords": ["ghostty", "notifications"]
+    }
+  ]
+}

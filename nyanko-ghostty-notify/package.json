@@ -1,0 +1,6 @@
+{
+  "name": "nyanko-ghostty-notify",
+  "version": "1.0.0",
+  "description": "Ghostty terminal notifications for Claude Code events (Tmux compatible)",
+  "author": "Chaoschan"
+}
