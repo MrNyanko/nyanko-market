@@ -19,17 +19,12 @@ This plugin fuses rigorous TTY tracking with macOS native notification fallbacks
 
 ## 🚀 Installation
 
-1. **Clone this repository** to your local machine (e.g., `~/Projects/nyanko-market`):
+1. **Add the marketplace** to Claude Code:
    ```bash
-   git clone https://github.com/Chaoschan/nyanko-market.git ~/Projects/nyanko-market
+   claude plugin marketplace add https://github.com/Chaoschan/nyanko-market
    ```
 
-2. **Register the local marketplace** in Claude Code:
-   ```bash
-   claude plugin marketplace add ~/Projects/nyanko-market
-   ```
-
-3. **Install the plugin**:
+2. **Install the plugin**:
    ```bash
    claude plugin install nyanko-ghostty-notify
    ```
