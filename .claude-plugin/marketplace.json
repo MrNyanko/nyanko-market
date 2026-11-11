@@ -12,6 +12,12 @@
       "source": "./nyanko-ghostty-notify",
       "description": "Ghostty terminal notifications",
       "keywords": ["ghostty", "notifications"]
+    },
+    {
+      "name": "affirmative-first-writing",
+      "source": "./affirmative-first-writing",
+      "description": "直接、具体的多语言写作规范，减少防御性否定、虚构反方与空洞转折",
+      "keywords": ["writing", "editing", "style", "affirmative-first"]
     }
   ]
 }

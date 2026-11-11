@@ -1,0 +1,9 @@
+{
+  "name": "affirmative-first-writing",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "直接、具体的多语言写作规范，减少防御性否定、虚构反方与空洞转折",
+  "author": {
+    "name": "Chaoschan"
+  }
+}
