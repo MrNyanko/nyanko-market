@@ -1,6 +1,6 @@
 # Nyanko Market 🐾
 
-A collection of custom Claude Code plugins developed by Chaoschan. 
+A collection of custom plugins developed by Chaoschan.
 
 ## 📦 Available Plugins
 
@@ -26,6 +26,14 @@ This plugin fuses rigorous TTY tracking with macOS native notification fallbacks
 /affirmative-first-writing:affirmative-first-writing 请按这份规范润色下面的文字：……
 ```
 
+### 3. `video-to-talk`
+
+把技术视频做成能在组会上按自己的节奏讲解的中文演示。给一个本地视频或可播放的链接，先取一段做样片，再按原片时间码核对全片分镜。原生 HTML 离线播放，保留鼠标，画面上没有按钮。单击、空格或右方向键播一段，默认 0.5 秒后停住。可按需另交中文讲稿、Obsidian 笔记或 Notion 配图长文。[查看技能说明](video-to-talk/skills/video-to-talk/SKILL.md)
+
+在 Codex 或 Claude Code 里可以这样提需求：
+
+> 用 video-to-talk 处理这段本地录屏。先把两个工具对比的那一分钟做成样片，每个停点给我一句中文讲稿。
+
 ---
 
 ## 🚀 Installation
@@ -45,7 +53,19 @@ This plugin fuses rigorous TTY tracking with macOS native notification fallbacks
 
    # 自然语言写作规范
    claude plugin install affirmative-first-writing@nyanko-market
+
+   # 技术视频改编为组会分享
+   claude plugin install video-to-talk@nyanko-market
    ```
+
+在 Codex 中安装 `video-to-talk`：
+
+```bash
+codex plugin marketplace add https://github.com/MrNyanko/nyanko-market
+codex plugin add video-to-talk@nyanko-market
+```
+
+若已添加市场，先用 `claude plugin marketplace update nyanko-market` 或 `codex plugin marketplace upgrade nyanko-market` 刷新，再执行相应的插件安装命令。
 
 ---
 

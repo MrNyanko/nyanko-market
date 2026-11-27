@@ -18,6 +18,12 @@
       "source": "./affirmative-first-writing",
       "description": "直接、具体的多语言写作规范，减少防御性否定、虚构反方与空洞转折，按需配图解释结构与变化",
       "keywords": ["writing", "editing", "style", "affirmative-first"]
+    },
+    {
+      "name": "video-to-talk",
+      "source": "./video-to-talk",
+      "description": "把技术视频改编成手动推进的原生离线 HTML 演示、分镜讲稿和配图长文",
+      "keywords": ["video", "storyboard", "offline-html", "presentation", "obsidian", "notion"]
     }
   ]
 }

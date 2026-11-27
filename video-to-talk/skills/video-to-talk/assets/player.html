@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>三个观测值的平均值</title>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body { display: grid; place-items: center; overflow: hidden; background: #101a21; cursor: default; }
+    main { width: min(100vw, 177.7778vh); aspect-ratio: 16 / 9; }
+    svg { display: block; width: 100%; height: 100%; pointer-events: none; user-select: none; }
+    text { fill: #edf4f5; }
+    .muted { fill: #b8c8cc; }
+  </style>
+</head>
+<body>
+  <main data-state="stopped" data-step="0">
+    <svg viewBox="0 0 1000 562.5" role="img" aria-label="三个观测值的平均值">
+      <!-- 各镜头共享的 SVG 定义可放进此处，帧内用 class，避免换场时复制相同的 id。 -->
+      <defs></defs>
+      <g id="previous" aria-hidden="true"></g>
+      <g id="frame"></g>
+    </svg>
+  </main>
+  <script>
+    const stage = document.querySelector("main");
+    const canvas = document.querySelector("svg");
+    const previous = document.querySelector("#previous");
+    const frame = document.querySelector("#frame");
+    const duration = 500;
+    const fadeDuration = 100;
+
+    // 创作区：替换示例图和 cues。draw(t) 返回完整的 SVG 内容，t 从 0 到 1。
+    // 同一 scene 的前后停点应首尾相接。切换 scene 时将新帧叠在旧帧上渐显，新帧需包含不透明背景。
+    function plot(title, growth, meanProgress) {
+      const values = [2, 4, 6];
+      const xs = [240, 500, 760];
+      const baseline = 434;
+      const unit = 42;
+      const bars = values.map((value, i) => {
+        const height = value * unit * growth;
+        return `<rect x="${xs[i] - 44}" y="${baseline - height}" width="88" height="${height}" rx="5" fill="#75c5c8"/>
+          <text x="${xs[i]}" y="${baseline - height - 18}" opacity="${growth}" font-size="30">${value}</text>
+          <text x="${xs[i]}" y="480" class="muted" font-size="24">观测 ${i + 1}</text>`;
+      }).join("");
+      const mean = values.reduce((sum, value) => sum + value, 0) / values.length;
+      const meanY = baseline - mean * unit;
+      return `<rect width="1000" height="563" fill="#101a21"/>
+        <text x="96" y="99" font-size="46" font-weight="600">${title}</text>
+        <path d="M113 434H887" stroke="#6e828b" stroke-width="2"/>
+        <g text-anchor="middle">${bars}</g>
+        <path d="M113 ${meanY}h${774 * meanProgress}" stroke="#ffc97d" stroke-width="4" stroke-dasharray="8 6"/>
+        <text x="887" y="143" text-anchor="end" font-size="25" opacity="${meanProgress}">平均值 = (2 + 4 + 6) ÷ 3 = ${mean}</text>`;
+    }
+    const cues = [
+      { id: "samples", scene: "observations", label: "三次观测分别为 2、4、6",
+        draw: t => plot("三次观测", t, 0) },
+      { id: "mean", scene: "average", label: "三个观测值的算术平均值为 4",
+        draw: t => plot("算术平均值", 1, t) },
+    ];
+
+    // 播放器：仅在播放期间请求动画帧，末帧可停留任意久。
+    let index = -1;
+    let motion = null;
+    let frameRequest = 0;
+    let clickArmed = false;
+
+    function draw(elapsed) {
+      const t = Math.min(1, elapsed / duration);
+      const eased = t * t * (3 - 2 * t);
+      frame.innerHTML = cues[index].draw(eased);
+      if (previous.hasChildNodes()) {
+        const fade = Math.min(1, elapsed / fadeDuration);
+        frame.setAttribute("opacity", fade);
+        if (fade === 1) previous.replaceChildren();
+      }
+    }
+
+    function tick(now) {
+      if (!motion || document.hidden) return;
+      motion.elapsed += Math.max(0, now - motion.lastTime);
+      motion.lastTime = now;
+      draw(motion.elapsed);
+      if (motion.elapsed >= duration) {
+        motion = null;
+        stage.dataset.state = "stopped";
+        return;
+      }
+      frameRequest = requestAnimationFrame(tick);
+    }
+
+    function advance() {
+      if (motion || document.hidden || index + 1 >= cues.length) return;
+      const last = cues[index];
+      const cue = cues[++index];
+      if (last && last.scene !== cue.scene) {
+        previous.replaceChildren(...Array.from(frame.childNodes));
+      }
+      stage.dataset.state = "playing";
+      stage.dataset.step = index + 1;
+      stage.dataset.cue = cue.id;
+      canvas.setAttribute("aria-label", cue.label);
+      motion = { elapsed: 0, lastTime: performance.now() };
+      draw(0);
+      frameRequest = requestAnimationFrame(tick);
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      clickArmed = false;
+      if (!motion) return;
+      if (document.hidden) {
+        cancelAnimationFrame(frameRequest);
+      } else {
+        motion.lastTime = performance.now();
+        frameRequest = requestAnimationFrame(tick);
+      }
+    });
+
+    function hasModifier(event) {
+      return event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
+    }
+    document.addEventListener("keydown", event => {
+      if (hasModifier(event) || event.isComposing || (event.key !== " " && event.key !== "ArrowRight")) return;
+      event.preventDefault();
+      if (!event.repeat) advance();
+    });
+    document.addEventListener("pointerdown", event => {
+      clickArmed = !motion && !document.hidden && event.isPrimary && event.button === 0 && !hasModifier(event);
+    });
+    document.addEventListener("pointercancel", () => { clickArmed = false; });
+    document.addEventListener("click", event => {
+      const ready = clickArmed;
+      clickArmed = false;
+      if (ready && event.button === 0 && event.detail === 1 && !hasModifier(event)) advance();
+    });
+
+    frame.innerHTML = cues[0].draw(0);
+  </script>
+</body>
+</html>
