@@ -1,0 +1,9 @@
+{
+  "name": "video-to-talk",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "从技术视频整理可追溯的分镜，制作手控的离线 HTML 组会演示、讲稿及配图长文。",
+  "author": {
+    "name": "Chaoschan"
+  }
+}
